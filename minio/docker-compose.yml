@@ -1,3 +1,6 @@
+# create an .env file with 
+# DATA_DIR=/srv/dev-disk-by-uuid-fc49e152-2bb3-4e7c-ad98-cb89f0cd6738/data/nextcloud
+
 ---
 # https://github.com/minio/minio
 

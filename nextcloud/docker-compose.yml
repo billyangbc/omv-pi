@@ -1,17 +1,18 @@
-#version: '2'
 volumes:
+  # when docke user default volumes (//var/lib/docker/volumes)
+  # looks like .env only works on services, not on volumes
   nextcloud:
     driver: local
     driver_opts:
       type: 'none'
       o: 'bind'
-      device: '${DATA_DIR}/nextcloud'
+      device: '/srv/dev-disk-by-uuid-fc49e152-2bb3-4e7c-ad98-cb89f0cd6738/data/nextcloud'
   db:
     driver: local
     driver_opts:
       type: 'none'
       o: 'bind'
-      device: '${DATA_DIR}/nexcloud_db'
+      device: '/srv/dev-disk-by-uuid-fc49e152-2bb3-4e7c-ad98-cb89f0cd6738/data/nexcloud_db'
 
 services:
   db:
