@@ -18,8 +18,9 @@ services:
     restart: always      
     environment:
       #DATA_DIR: /srv/dev-disk-by-uuid-fc49e152-2bb3-4e7c-ad98-cb89f0cd6738/data
-      MINIO_ROOT_USER: "admin"
-      MINIO_ROOT_PASSWORD: "admin"
+      # access and secret keys for MinIO server minimal 8 characters
+      MINIO_ROOT_USER: "minio-admin"
+      MINIO_ROOT_PASSWORD: "minio-admin"
     command: server --address ":9000" --console-address ":9001" /data
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
