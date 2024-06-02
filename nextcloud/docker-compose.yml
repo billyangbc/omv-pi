@@ -1,25 +1,14 @@
-volumes:
-  # when docke user default volumes (//var/lib/docker/volumes)
-  # looks like .env only works on services, not on volumes
-  nextcloud:
-    driver: local
-    driver_opts:
-      type: 'none'
-      o: 'bind'
-      device: '/srv/dev-disk-by-uuid-fc49e152-2bb3-4e7c-ad98-cb89f0cd6738/data/nextcloud'
-  db:
-    driver: local
-    driver_opts:
-      type: 'none'
-      o: 'bind'
-      device: '/srv/dev-disk-by-uuid-fc49e152-2bb3-4e7c-ad98-cb89f0cd6738/data/nexcloud_db'
-
+# create an .env file with 
+# DATA_DIR=/srv/dev-disk-by-uuid-fc49e152-2bb3-4e7c-ad98-cb89f0cd6738/data/nextcloud
+# when docke user default volumes (//var/lib/docker/volumes)
+# looks like .env only works on services, not on volumes
+#version: '2'
 services:
-  db:
+  mariadb:
     image: yobasystems/alpine-mariadb
     restart: always
     volumes:
-      - db:/var/lib/mysql
+      - '${DATA_DIR}/nextcloud_db:/var/lib/mysql'
     environment:
       - MYSQL_ROOT_PASSWORD=admin
       - MYSQL_PASSWORD=nextcloud
@@ -32,14 +21,13 @@ services:
       - 8080:80
       - 443:443
     links:
-      - db
+      - mariadb
     volumes:
-      - nextcloud:/var/www/html
+      - '${DATA_DIR}/nextcloud:/var/www/html'
     environment:
       - MYSQL_PASSWORD=nextcloud
       - MYSQL_DATABASE=nextcloud
       - MYSQL_USER=nextcloud
-      - MYSQL_HOST=db
+      - MYSQL_HOST=mariadb
       - PUID=1000
       - PGID=1000
-
