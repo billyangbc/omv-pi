@@ -1,0 +1,28 @@
+---
+# https://github.com/minio/minio
+
+networks:
+  minio_network:
+
+services:
+  minio:
+    image: billyangbc/minio:alpine-arm #pixelchrome/minio-arm
+    volumes:
+      # /var/local/docker/volumes
+      - "${DATA_DIR}/minio:/data"
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    networks:
+      - minio_network
+    restart: always      
+    environment:
+      #DATA_DIR: /srv/dev-disk-by-uuid-fc49e152-2bb3-4e7c-ad98-cb89f0cd6738/data
+      MINIO_ROOT_USER: "admin"
+      MINIO_ROOT_PASSWORD: "admin"
+    command: server --address ":9000" --console-address ":9001" /data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
