@@ -25,9 +25,39 @@ services:
       # access and secret keys for MinIO server minimal 8 characters
       MINIO_ROOT_USER: "minio-admin"
       MINIO_ROOT_PASSWORD: "minio-admin"
+      MINIO_PROMETHEUS_JOB_ID: "prometheus"
+      MINIO_PROMETHEUS_URL: "http://prometheus:9090"
     command: server --address ":9000" --console-address ":9001" /data
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
       interval: 30s
       timeout: 20s
       retries: 3
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    ports:
+      - 9090:9090
+    restart: unless-stopped
+    volumes:
+      - "${DATA_DIR}/prometheus/config:/etc/prometheus"
+      - "${DATA_DIR}/prometheus/prom_data:/prometheus"
+    networks:
+      - minio_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9090/-/ready"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    restart: unless-stopped
+    ports:
+      - 3000:3000
+    volumes:
+      - "${DATA_DIR}/grafana:/var/lib/grafana"
+    networks:
+      - minio_network
