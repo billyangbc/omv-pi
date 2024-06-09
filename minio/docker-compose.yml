@@ -9,7 +9,8 @@ networks:
 
 services:
   minio:
-    image: billyangbc/minio:alpine-arm #pixelchrome/minio-arm
+    #image: billyangbc/minio:alpine-arm #pixelchrome/minio-arm
+    image: billyangbc/minio:debian-arm
     volumes:
       # /var/local/docker/volumes
       - "${DATA_DIR}/minio:/data"
