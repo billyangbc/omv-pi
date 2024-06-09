@@ -1,0 +1,13 @@
+version: '3'
+services:
+  nginx-proxy-manage:
+    container_name: nginx-proxy-manager
+    image: jc21/nginx-proxy-manager:latest
+    ports:
+      - '8188:80' 
+      - '8189:81' 
+      - '8190:443' 
+    volumes:
+      - "${DOCKER_DATA_DIR}/ngx/data:/data"
+      - "${DOCKER_DATA_DIR}/ngx/letsencrypt:/etc/letsencrypt"
+    restart: unless-stopped
